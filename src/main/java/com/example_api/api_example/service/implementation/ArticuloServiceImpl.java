@@ -46,7 +46,10 @@ public class ArticuloServiceImpl implements ArticuloService {
     @Override
     @Transactional
     public ArticuloResponseDTO save(ArticuloRequestDTO articuloRequest) {
-        Proveedor proveedor = proveedorRepository.getReferenceById(articuloRequest.getProveedorId());
+        // Obtenemos el proveedor usando el ID que viene del Frontend
+        Proveedor proveedor = proveedorRepository.findById(articuloRequest.getProveedorId())
+                .orElseThrow(() -> new RuntimeException("Proveedor no encontrado"));
+
         Articulo articulo = articuloMapper.toEntity(articuloRequest, proveedor);
         return articuloMapper.toDTO(articuloRepository.save(articulo));
     }
@@ -57,8 +60,8 @@ public class ArticuloServiceImpl implements ArticuloService {
         Articulo articuloActual = articuloRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Artículo no encontrado"));
 
-        Proveedor proveedor = proveedorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("proveedor no encontrado"));
+        Proveedor proveedor = proveedorRepository.findById(articuloRequest.getProveedorId())
+                .orElseThrow(() -> new RuntimeException("Proveedor no encontrado"));
 
         articuloActual.setCodigo(articuloRequest.getCodigo());
         articuloActual.setNombre(articuloRequest.getNombre());

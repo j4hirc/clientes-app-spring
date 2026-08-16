@@ -24,6 +24,11 @@ public class ArticuloMapper {
         dto.setCodigo(articulo.getCodigo());
         dto.setNombre(articulo.getNombre());
         dto.setCategoria(articulo.getCategoria());
+
+        if (articulo.getProveedor() != null) {
+            dto.setProveedor(articulo.getProveedor());
+        }
+
         return dto;
     }
 }
