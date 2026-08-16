@@ -17,6 +17,9 @@
         private Long id;
         private String codigo;
         private String nombre;
-        private String categoria;;
+        private String categoria;
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "proveedor_id")
+        private Proveedor proveedor;
 
     }

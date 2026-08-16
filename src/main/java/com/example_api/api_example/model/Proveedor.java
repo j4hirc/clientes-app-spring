@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "proveedores")
 @Data
@@ -17,5 +19,8 @@ public class Proveedor {
     private String nombre;
     private String descripcion;
     private String foto_url;
+
+    @OneToMany(mappedBy = "proveedor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Articulo> articulos;
 
 }

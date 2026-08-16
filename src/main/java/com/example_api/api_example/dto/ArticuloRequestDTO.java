@@ -6,4 +6,5 @@ public class ArticuloRequestDTO {
     private String codigo;
     private String nombre;
     private String categoria;
+    private Long proveedorId;
 }

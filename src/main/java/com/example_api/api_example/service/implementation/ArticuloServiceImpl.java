@@ -3,7 +3,9 @@ package com.example_api.api_example.service.implementation;
 import com.example_api.api_example.dto.ArticuloRequestDTO;
 import com.example_api.api_example.dto.ArticuloResponseDTO;
 import com.example_api.api_example.model.Articulo;
+import com.example_api.api_example.model.Proveedor;
 import com.example_api.api_example.repository.ArticuloRepository;
+import com.example_api.api_example.repository.ProveedorRepository;
 import com.example_api.api_example.service.ArticuloService;
 import com.example_api.api_example.service.mapper.ArticuloMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class ArticuloServiceImpl implements ArticuloService {
 
     @Autowired
     private ArticuloRepository articuloRepository;
+
+    @Autowired
+    private ProveedorRepository proveedorRepository;
 
     @Autowired
     private ArticuloMapper articuloMapper;
@@ -41,7 +46,8 @@ public class ArticuloServiceImpl implements ArticuloService {
     @Override
     @Transactional
     public ArticuloResponseDTO save(ArticuloRequestDTO articuloRequest) {
-        Articulo articulo = articuloMapper.toEntity(articuloRequest);
+        Proveedor proveedor = proveedorRepository.getReferenceById(articuloRequest.getProveedorId());
+        Articulo articulo = articuloMapper.toEntity(articuloRequest, proveedor);
         return articuloMapper.toDTO(articuloRepository.save(articulo));
     }
 
@@ -51,9 +57,13 @@ public class ArticuloServiceImpl implements ArticuloService {
         Articulo articuloActual = articuloRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Artículo no encontrado"));
 
+        Proveedor proveedor = proveedorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("proveedor no encontrado"));
+
         articuloActual.setCodigo(articuloRequest.getCodigo());
         articuloActual.setNombre(articuloRequest.getNombre());
         articuloActual.setCategoria(articuloRequest.getCategoria());
+        articuloActual.setProveedor(proveedor);
 
         return articuloMapper.toDTO(articuloRepository.save(articuloActual));
     }
